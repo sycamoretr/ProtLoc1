@@ -15,10 +15,10 @@
    * train_data.fasta
    * train_label_dict.npy
    * val_data.fasta
- * [model
+ * model
    * model.py
  * utils
-   * Evaluation_metrics.py)
+   * Evaluation_metrics.py
  * train.py
  * predict.py
  * README.md
