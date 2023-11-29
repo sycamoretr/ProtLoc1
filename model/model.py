@@ -72,7 +72,7 @@ class Model(nn.Module):
         data = data.to(device)
         protx = self.SAGE(data,device)
         x = protx.unsqueeze(0).float()
-        att = self.Attention(x)  											# att.shape = (1, ATTENTION_HEADS, seq_len)
+        att = self.Attention(x)  											
         node_feature_embedding = att @ x
         embedding = node_feature_embedding
         embedding = embedding.unsqueeze(0).float()
