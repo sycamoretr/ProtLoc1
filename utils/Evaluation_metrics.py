@@ -1,4 +1,4 @@
-#多标签评估指标
+
 from sklearn.metrics import f1_score
 from sklearn.metrics import hamming_loss,jaccard_score
 from sklearn.metrics import accuracy_score
@@ -10,7 +10,7 @@ def Average_Precision(label, logit):
     N = len(label)
     for i in range(N):
         if max(label[i]) == 0 or min(label[i]) == 1:
-            print("该条数据哪一类都不是或者全都是")
+            print("Data error")
     precision = 0
     for i in range(N):
         index = np.where(label[i] == 1)[0]
