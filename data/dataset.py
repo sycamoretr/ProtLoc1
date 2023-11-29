@@ -29,49 +29,24 @@ def create_dataset(root_x, root_y, dis_threshold):
         # print(y)
         data_list.append((Data(x=x, y=y, edge_index=edge_index)))
     return data_list
-root_x = 'traindata.fasta'
-root_y = 'train_label_dict.npy'
+    
+root_x1 = 'train_data.fasta'
+root_y1 = 'train_label_dict.npy'
 dis_threshold = 20
-list = create_dataset(root_x, root_y, dis_threshold)
-torch.save(list,'train_x.pt')
+list1 = create_dataset(root_x1, root_y1, dis_threshold)
+torch.save(list1,'traindata_x.pt')
+
+root_x2 = 'val_data.fasta'
+root_y2 = 'train_label_dict.npy'
+list2 = create_dataset(root_x2, root_y2, dis_threshold)
+torch.save(list2,'valdata_x.pt')
+
+root_x3 = 'testdata.fasta'
+root_y3 = 'test_label_dict.npy'
+list3 = create_dataset(root_x3, root_y3, dis_threshold)
+torch.save(list3,'testdata_x.pt')
 
 
-
-class MyOwnDataset(InMemoryDataset):
-    def __init__(self, root, transform=None, pre_transform=None, pre_filter=None, root_x=None, root_y=None,
-                 out_filename=None,
-                 dis_threshold=20):
-        self.dis_threshold = dis_threshold
-        self.root_x = root_x
-        self.root_y = root_y
-        self.out_filename = out_filename
-        super().__init__(root, transform, pre_transform, pre_filter)
-        self.data, self.slices = torch.load(self.processed_paths[0])
-
-    @property
-    def raw_file_names(self):
-        return [self.root_x, self.root_y]
-
-    @property
-    def processed_file_names(self):
-        return [self.out_filename]
-
-    def download(self):
-        # Download to `self.raw_dir`.
-        pass
-
-    def process(self):
-        # Read data into huge `Data` list.
-        data_list = create_dataset(self.raw_file_names[0], self.raw_file_names[1], self.dis_threshold)
-
-        if self.pre_filter is not None:
-            data_list = [data for data in data_list if self.pre_filter(data)]
-
-        if self.pre_transform is not None:
-            data_list = [self.pre_transform(data) for data in data_list]
-
-        data, slices = self.collate(data_list)
-        torch.save((data, slices), self.processed_paths[0])
 
 
 
