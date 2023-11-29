@@ -26,10 +26,26 @@ def esm2(data):
 
 
 def main():
-    file_path = 'train_data.fasta'
-    # file_path = 'data/DNAPred_Dataset/PDNA-52_sequence.fasta'
+    file_path1 = 'train_data.fasta'
+    for record in tqdm(SeqIO.parse(file_path1, 'fasta')):
 
+        data = [
+            (record.id, str(record.seq)),
+        ]
+        matrix = esm2(data)
+        np.savetxt('./esm_3b_csv/' + record.id + '.csv', matrix, delimiter=',')
+        
+    file_path2 = 'val_data.fasta'
     for record in tqdm(SeqIO.parse(file_path, 'fasta')):
+
+        data = [
+            (record.id, str(record.seq)),
+        ]
+        matrix = esm2(data)
+        np.savetxt('./esm_3b_csv/' + record.id + '.csv', matrix, delimiter=',')
+        
+    file_path3 = 'train_data.fasta'
+    for record in tqdm(SeqIO.parse(file_path3, 'fasta')):
 
         data = [
             (record.id, str(record.seq)),
