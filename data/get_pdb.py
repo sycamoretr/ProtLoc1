@@ -33,7 +33,7 @@ def read_pdb(id):
 
 
 test_coordinate_dict = {}
-for fa in SeqIO.parse("../data/testdata.fasta","fasta"):
+for fa in SeqIO.parse("testdata.fasta","fasta"):
     id = fa.id
     get_pdb(id)
     d = read_pdb(str(id))
@@ -41,7 +41,7 @@ for fa in SeqIO.parse("../data/testdata.fasta","fasta"):
 np.save('test_coordinate_dict.npy',test_coordinate_dict)
 
 train_coordinate_dict = {}
-for fa in SeqIO.parse("../data/traindata.fasta","fasta"):
+for fa in SeqIO.parse("traindata.fasta","fasta"):
     id = fa.id
     get_pdb(id)
     d = read_pdb(str(id))
@@ -49,7 +49,7 @@ for fa in SeqIO.parse("../data/traindata.fasta","fasta"):
 np.save('train_coordinate_dict.npy',train_coordinate_dict)
 
 val_coordinate_dict = {}
-for fa in SeqIO.parse("../data/valdata.fasta","fasta"):
+for fa in SeqIO.parse("valdata.fasta","fasta"):
     id = fa.id
     get_pdb(id)
     d = read_pdb(str(id))
