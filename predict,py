@@ -1,0 +1,51 @@
+import collections
+
+import torch
+from tqdm import tqdm
+from utils.Evaluation_metrics import Metrics
+from model.model import Model
+import numpy as np
+import random
+import warnings
+from torch_geometric.data import DataLoader
+
+
+def Eval(model, val_dataset, device):
+    model.eval()
+    epoch_loss_valid = 0.0
+    test_pred = []
+    test_label = []
+    with torch.no_grad():
+        for i, batch in tqdm(enumerate(val_dataset)):
+            pred = model(batch, device)
+            label = batch.y
+            test_pred += pred.detach().cpu().numpy().tolist()
+            test_label += label.cpu().numpy().tolist()
+            batch_loss = model.criterion(pred, label.to(torch.float))
+            epoch_loss_valid += batch_loss.item()
+        loss = epoch_loss_valid / len(val_dataset)
+        metrics = Metrics(torch.tensor(test_pred), torch.tensor(test_label))
+    return loss, metrics
+
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)  # cpu
+    torch.cuda.manual_seed(seed)  # gpu
+    torch.cuda.manual_seed_all(seed)  # all gpus
+
+if __name__ == "__main__":
+    warnings.filterwarnings('ignore')
+    set_seed(1234)
+    test_data_list = torch.load('./data/testdata_x.pt')
+    test_loader = DataLoader(test_data_list, shuffle=False, batch_size=1, drop_last=True)
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    model = Model().to(device)
+    model.load_state_dict(torch.load('state_dict_model.pth'))
+    loss, metrics = Eval(model, test_loader, device)
+    print('ACC :   {}'.format('%.4f' % metrics[0]))
+    print('AP :   {}'.format('%.4f' % metrics[1]))
+    print('HL :   {}'.format('%.4f' % metrics[2]))
+    print('F1 :   {}'.format('%.4f' % metrics[3]))
+    print('jaccard :   {}'.format('%.4f' % metrics[4]))
